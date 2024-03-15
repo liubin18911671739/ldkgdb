@@ -64,3 +64,7 @@ chatgpt: https://platform.openai.com/
 claude: https://console.anthropic.com/workbench
 
 gemini: https://aistudio.google.com/
+
+docker build -t your-flask-app .
+
+docker run -p 5000:5000 your-flask-app

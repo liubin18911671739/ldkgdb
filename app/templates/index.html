@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block title %}Neo4j Graph Database Management
+System{% endblock %} {% block content %}
+<div class="jumbotron">
+  <h1 class="display-4">Welcome to Neo4j Graph Database Management System</h1>
+  <p class="lead">
+    This is a web application for managing Neo4j graph databases.
+  </p>
+  <hr class="my-4" />
+  <p>
+    You can import data from various file formats, perform graph operations, and
+    visualize your data.
+  </p>
+  <a
+    class="btn btn-primary btn-lg"
+    href="{{ url_for('import.upload') }}"
+    role="button"
+    >Import Data</a
+  >
+  <a
+    class="btn btn-secondary btn-lg"
+    href="{{ url_for('graph.operations') }}"
+    role="button"
+    >Graph Operations</a
+  >
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}Neo4j Graph Database Management System{% endblock %}
+    </title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Neo4j Flask App</title>
+        <link
+          rel="stylesheet"
+          href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+        />
+      </head>
+      <body>
+        <div class="container">
+          <h1>Upload Data File</h1>
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="file" class="form-label"
+                >Choose CSV, JSON, RDF file</label
+              >
+              <input type="file" class="form-control" id="file" name="file" />
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </form>
+        </div>
+        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+      </body>
+    </html>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="{{ url_for('index') }}">Neo4j Graph DB</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('import.upload') }}"
+              >Import Data</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('graph.operations') }}"
+              >Graph Operations</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container my-4">{% block content %}{% endblock %}</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/import.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

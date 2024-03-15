@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block title %}Import Result{% endblock %} {% block
+content %}
+<h1>Import Result</h1>
+
+{% if result.success %}
+<div class="alert alert-success" role="alert">Data imported successfully!</div>
+{% else %}
+<div class="alert alert-danger" role="alert">
+  Error importing data: {{ result.error }}
+</div>
+{% endif %}
+
+<h2>Import Statistics</h2>
+<ul>
+  <li>File Type: {{ result.file_type }}</li>
+  <li>Nodes Imported: {{ result.nodes_imported }}</li>
+  <li>Relationships Imported: {{ result.relationships_imported }}</li>
+  <li>Import Time: {{ result.import_time }} seconds</li>
+</ul>
+
+<h2>Visualization</h2>
+<div id="visualization"></div>
+
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/visualization.js') }}"></script>
+<script>
+  const data = {{ result.data | tojson }};
+  visualizeGraph(data, 'visualization');
+</script>
+{% endblock %}

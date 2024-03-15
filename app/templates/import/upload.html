@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block title %}Import Data{% endblock %} {% block
+content %}
+<h1>Import Data</h1>
+
+<form id="import-form" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="file-input">Select a file to import:</label>
+    <input
+      type="file"
+      class="form-control-file"
+      id="file-input"
+      name="file"
+      accept=".csv,.json,.rdf"
+    />
+  </div>
+  <div class="form-group">
+    <label for="file-type">File Type:</label>
+    <select class="form-control" id="file-type" name="file-type">
+      <option value="csv">CSV</option>
+      <option value="json">JSON</option>
+      <option value="rdf">RDF</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Import</button>
+</form>
+
+<div id="import-result"></div>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/import.js') }}"></script>
+<script>
+  const importForm = document.getElementById('import-form');
+  const importResult = document.getElementById('import-result');
+
+  importForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(importForm);
+      const response = await fetch('{{ url_for('import.upload') }}', {
+          method: 'POST',
+          body: formData
+      });
+      const result = await response.json();
+
+      if (result.success) {
+          importResult.innerHTML = `<div class="alert alert-success" role="alert">Data imported successfully!</div>`;
+          window.location.href = '{{ url_for('import.result') }}?result=' + encodeURIComponent(JSON.stringify(result));
+      } else {
+          importResult.innerHTML = `<div class="alert alert-danger" role="alert">Error importing data: ${result.error}</div>`;
+      }
+  });
+</script>
+{% endblock %}

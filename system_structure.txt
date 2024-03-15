@@ -68,57 +68,123 @@
 
 7. Flask应用程序将HTML响应发送回Web浏览器,用户在浏览器中查看结果。
 
-系统的代码结构：
 
+好的,我可以帮你将整个系统放到 `app` 文件夹中,并添加 `config.py` 和 `run.py` 文件。以下是修改后的文件结构:
+
+```
 ldkgdb/
-├── app.py
+├── app/
+│   ├── __init__.py
+│   ├── routes.py
+│   ├── models.py
+│   ├── utils.py
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── styles.css
+│   │   ├── js/
+│   │   │   ├── import.js
+│   │   │   ├── graph.js
+│   │   │   └── visualization.js
+│   │   └── images/
+│   │       └── logo.png
+│   └── templates/
+│       ├── base.html
+│       ├── index.html
+│       ├── import/
+│       │   ├── upload.html
+│       │   └── result.html
+│       ├── graph/
+│       │   ├── operations.html
+│       │   └── result.html
+│       └── errors/
+│           ├── 404.html
+│           └── 500.html
 ├── config.py
+├── run.py
 ├── requirements.txt
-├── static/
-│   ├── css/
-│   │   └── styles.css
-│   ├── js/
-│   │   ├── import.js
-│   │   ├── graph.js
-│   │   └── visualization.js
-│   └── images/
-│       └── logo.png
-├── templates/
-│   ├── base.html
-│   ├── import/
-│   │   ├── upload.html
-│   │   └── result.html
-│   ├── graph/
-│   │   ├── operations.html
-│   │   └── result.html
-│   └── index.html
-├── import/
-│   ├── __init__.py
-│   ├── routes.py
-│   └── utils.py
-├── graph/
-│   ├── __init__.py
-│   ├── routes.py
-│   └── utils.py
-├── errors/
-│   ├── __init__.py
-│   └── handlers.py
-└── models/
-    ├── __init__.py
-    └── neo4j.py
+└── .env
+```
 
-app.py 是 Flask 应用程序的入口点,用于创建应用程序实例、注册蓝图和配置应用程序。
+以下是每个文件的内容:
 
-config.py 包含应用程序的配置变量,如数据库连接字符串和密钥。
+`app/__init__.py`:
 
-static/ 文件夹包含 CSS、JavaScript 和图像等静态资源。
+```python
+from flask import Flask
 
-templates/ 文件夹包含 HTML 模板,其中 base.html 是基础模板。
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object('config.Config')
 
-import/ 文件夹包含处理数据导入的蓝图,包括路由、视图函数和实用函数。
+    from app.routes import main_blueprint
+    app.register_blueprint(main_blueprint)
 
-graph/ 文件夹包含处理图形操作的蓝图,包括路由、视图函数和实用函数。
+    from app.errors import error_pages
+    app.register_blueprint(error_pages)
 
-errors/ 文件夹包含错误处理程序。
+    return app
+```
 
-models/ 文件夹包含与 Neo4j 数据库交互的模型和实用函数。
+`app/routes.py`:
+
+```python
+from flask import Blueprint, render_template, request, jsonify
+from app.models import neo4j
+from app.utils import import_file, process_graph_operation
+
+main_blueprint = Blueprint('main', __name__)
+
+# 其他路由和视图函数...
+```
+
+`app/models.py`:
+
+```python
+# 与 Neo4j 交互的模型和实用函数...
+```
+
+`app/utils.py`:
+
+```python
+# 文件导入和图形操作的实用函数...
+```
+
+`config.py`:
+
+```python
+import os
+
+class Config:
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'your_secret_key')
+    NEO4J_URI = os.environ.get('NEO4J_URI', 'bolt://localhost:7687')
+    NEO4J_USER = os.environ.get('NEO4J_USER', 'neo4j')
+    NEO4J_PASSWORD = os.environ.get('NEO4J_PASSWORD', 'neo4j')
+```
+
+`run.py`:
+
+```python
+from app import create_app
+
+app = create_app()
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+在这个结构中:
+
+- `app` 文件夹包含了整个应用程序的代码。
+- `app/__init__.py` 定义了应用程序工厂函数 `create_app()`，用于创建 Flask 应用程序实例、加载配置和注册蓝图。
+- `app/routes.py` 包含了应用程序的路由和视图函数。
+- `app/models.py` 包含了与 Neo4j 交互的模型和实用函数。
+- `app/utils.py` 包含了文件导入和图形操作的实用函数。
+- `app/static` 和 `app/templates` 分别包含了静态文件和模板文件。
+- `config.py` 包含了应用程序的配置变量,如 `SECRET_KEY` 和 Neo4j 连接信息。
+- `run.py` 是应用程序的入口点,它创建并运行应用程序实例。
+- `requirements.txt` 列出了应用程序所需的 Python 包。
+- `.env` 文件用于存储环境变量,如 `SECRET_KEY` 和 Neo4j 连接信息。
+
+您需要根据具体的实现情况,填充每个文件的内容。此外,您可能还需要调整文件结构和导入语句以适应新的结构。
+
+在开发过程中,您可以通过运行 `python run.py` 命令来启动应用程序的开发服务器。在生产环境中,您可以使用 WSGI 服务器(如 Gunicorn)来运行应用程序。

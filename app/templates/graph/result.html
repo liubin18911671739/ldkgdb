@@ -1,0 +1,35 @@
+{% extends 'base.html' %} {% block title %}Graph Operation Result{% endblock %}
+{% block content %}
+<h1>Graph Operation Result</h1>
+
+{% if result.success %}
+<div class="alert alert-success" role="alert">
+  Graph operation performed successfully!
+</div>
+{% else %}
+<div class="alert alert-danger" role="alert">
+  Error performing graph operation: {{ result.error }}
+</div>
+{% endif %}
+
+<h2>Operation Details</h2>
+<ul>
+  <li>Operation Type: {{ result.operation_type }}</li>
+  {% if result.nodes_affected %}
+  <li>Nodes Affected: {{ result.nodes_affected }}</li>
+  {% endif %} {% if result.relationships_affected %}
+  <li>Relationships Affected: {{ result.relationships_affected }}</li>
+  {% endif %}
+  <li>Operation Time: {{ result.operation_time }} seconds</li>
+</ul>
+
+<h2>Visualization</h2>
+<div id="visualization"></div>
+
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/visualization.js') }}"></script>
+<script>
+  const data = {{ result.data | tojson }};
+  visualizeGraph(data, 'visualization');
+</script>
+{% endblock %}

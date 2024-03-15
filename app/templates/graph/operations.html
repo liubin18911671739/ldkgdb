@@ -1,0 +1,73 @@
+{% extends 'base.html' %} {% block title %}Graph Operations{% endblock %} {%
+block content %}
+<h1>Graph Operations</h1>
+
+<form id="operations-form">
+  <div class="form-group">
+    <label for="operation-type">Operation Type:</label>
+    <select class="form-control" id="operation-type" name="operation-type">
+      <option value="merge">Merge</option>
+      <option value="delete">Delete</option>
+      <option value="query">Query</option>
+    </select>
+  </div>
+
+  <div id="operation-inputs"></div>
+
+  <button type="submit" class="btn btn-primary">Execute</button>
+</form>
+
+<div id="operation-result"></div>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+<script>
+  const operationsForm = document.getElementById('operations-form');
+  const operationInputs = document.getElementById('operation-inputs');
+  const operationResult = document.getElementById('operation-result');
+
+  const operationTypes = {
+      'merge': ['label', 'properties'],
+      'delete': ['label', 'properties'],
+      'query': ['query']
+  };
+
+  function renderOperationInputs(type) {
+      operationInputs.innerHTML = '';
+      operationTypes[type].forEach(input => {
+          const formGroup = document.createElement('div');
+          formGroup.classList.add('form-group');
+          const label = document.createElement('label');
+          label.textContent = input.charAt(0).toUpperCase() + input.slice(1) + ':';
+          const inputElement = document.createElement('input');
+          inputElement.type = 'text';
+          inputElement.classList.add('form-control');
+          inputElement.name = input;
+          formGroup.appendChild(label);
+          formGroup.appendChild(inputElement);
+          operationInputs.appendChild(formGroup);
+      });
+  }
+
+  const operationTypeSelect = document.getElementById('operation-type');
+  operationTypeSelect.addEventListener('change', () => {
+      renderOperationInputs(operationTypeSelect.value);
+  });
+
+  operationsForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(operationsForm);
+      const response = await fetch('{{ url_for('graph.operations') }}', {
+          method: 'POST',
+          body: formData
+      });
+      const result = await response.json();
+
+      if (result.success) {
+          operationResult.innerHTML = `<div class="alert alert-success" role="alert">Graph operation performed successfully!</div>`;
+          window.location.href = '{{ url_for('graph.result') }}?result=' + encodeURIComponent(JSON.stringify(result));
+      } else {
+          operationResult.innerHTML = `<div class="alert alert-danger" role="alert">Error performing graph operation: ${result.error}</div>`;
+      }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block title %}Internal Server Error{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="error-template">
+        <h1>Oops!</h1>
+        <h2>500 Internal Server Error</h2>
+        <div class="error-details">
+          Sorry, an unexpected error has occurred on the server.
+        </div>
+        <div class="error-actions">
+          <a href="{{ url_for('main.index') }}" class="btn btn-primary btn-lg">
+            <span class="glyphicon glyphicon-home"></span>
+            Take Me Home
+          </a>
+          <a
+            href="{{ url_for('main.report_error') }}"
+            class="btn btn-default btn-lg"
+          >
+            <span class="glyphicon glyphicon-envelope"></span>
+            Report Error
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
