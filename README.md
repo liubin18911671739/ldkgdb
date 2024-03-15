@@ -1,0 +1,2 @@
+# ldkgdb
+ldkg-db-manage
