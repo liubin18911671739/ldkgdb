@@ -1,0 +1,14 @@
+/neo4j_flask_app
+    /static
+        /css
+            - bootstrap.min.css
+        /js
+            - bootstrap.min.js
+            - jquery.min.js
+    /templates
+        - index.html
+        - results.html
+    - app.py
+    - requirements.txt
+
+

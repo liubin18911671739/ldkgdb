@@ -1,0 +1,8 @@
+你是一个人工智能方面专家。
+帮我设计一个数据库系统管理neo4j图数据库管理系统，该系统满足一下需求。
+系统需求如下： 
+1.使用flask作为web框架，bootstrap样式实现库 
+2.数据库使用 neo4j 图数据库 
+3.使用APOC (Awesome Procedures On Cypher) 在线批量倒入数据csv, json，rdf
+4.动态显示倒入结果
+5.neo4j数据库中进行图操作
