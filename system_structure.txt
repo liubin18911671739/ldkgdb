@@ -1,14 +1,124 @@
-/neo4j_flask_app
-    /static
-        /css
-            - bootstrap.min.css
-        /js
-            - bootstrap.min.js
-            - jquery.min.js
-    /templates
-        - index.html
-        - results.html
-    - app.py
-    - requirements.txt
+整个系统的结构和组件之间的关系：
 
+```
++-------------------+
+|     Web Browser   |
++-------------------+
+            |
+            | HTTP Requests
+            |
++-------------------+
+|     Flask App     |
++-------------------+
+            |
+            |
++-------------------+
+|    View Functions |
+| (Import, Graph,   |
+|  Visualization)   |
++-------------------+
+            |
+            |
++-------------------+
+|      Templates    |
+|    (HTML, CSS,    |
+|     JavaScript)   |
++-------------------+
+            |该架构图清晰地展示了系统的各个组件以及它们之间的交互关系,有助于更好地理解整个系统的工作原理。
+            |
++-------------------+
+|        Py2neo     |
+|     (Neo4j Driver)|
++-------------------+
+            |
+            |
++-------------------+
+|     Neo4j Graph   |
+|      Database     |
++-------------------+
+```
 
+该架构图展示了整个系统的不同组件及它们之间的交互。让我们逐一了解每个组件:
+
+1. **Web Browser**：用户通过Web浏览器与Flask应用程序进行交互,发送HTTP请求并接收响应。
+
+2. **Flask App**：Flask应用程序是整个系统的核心,它接收来自Web浏览器的HTTP请求,并将它们路由到相应的视图函数进行处理。
+
+3. **View Functions**：视图函数处理不同功能区域的逻辑,如数据导入、图形操作和可视化。它们与模板交互以生成HTML响应,并与Neo4j数据库驱动程序进行交互以执行数据库操作。
+
+4. **Templates**：HTML模板定义了应用程序的用户界面,包括结构、样式和交互性。它们使用Flask的模板引擎动态渲染数据。
+
+5. **Py2neo**：Py2neo是一个Python驱动程序,用于与Neo4j图形数据库进行交互。它提供了执行Cypher查询和其他数据库操作的功能。
+
+6. **Neo4j Graph Database**：Neo4j图形数据库用于存储和管理图形数据。它通过Py2neo驱动程序与Flask应用程序进行通信。
+
+整个系统的工作流程如下:
+
+1. 用户通过Web浏览器发送HTTP请求到Flask应用程序。
+
+2. Flask应用程序将请求路由到相应的视图函数进行处理。
+
+3. 视图函数与模板交互,生成动态HTML响应。
+
+4. 视图函数还通过Py2neo驱动程序与Neo4j数据库进行交互,执行数据导入、图形操作和查询等操作。
+
+5. Neo4j数据库根据请求执行相应的操作,并将结果返回给视图函数。
+
+6. 视图函数将处理后的数据传递给模板,模板生成最终的HTML响应。
+
+7. Flask应用程序将HTML响应发送回Web浏览器,用户在浏览器中查看结果。
+
+系统的代码结构：
+
+ldkgdb/
+├── app.py
+├── config.py
+├── requirements.txt
+├── static/
+│   ├── css/
+│   │   └── styles.css
+│   ├── js/
+│   │   ├── import.js
+│   │   ├── graph.js
+│   │   └── visualization.js
+│   └── images/
+│       └── logo.png
+├── templates/
+│   ├── base.html
+│   ├── import/
+│   │   ├── upload.html
+│   │   └── result.html
+│   ├── graph/
+│   │   ├── operations.html
+│   │   └── result.html
+│   └── index.html
+├── import/
+│   ├── __init__.py
+│   ├── routes.py
+│   └── utils.py
+├── graph/
+│   ├── __init__.py
+│   ├── routes.py
+│   └── utils.py
+├── errors/
+│   ├── __init__.py
+│   └── handlers.py
+└── models/
+    ├── __init__.py
+    └── neo4j.py
+
+app.py 是 Flask 应用程序的入口点,用于创建应用程序实例、注册蓝图和配置应用程序。
+
+config.py 包含应用程序的配置变量,如数据库连接字符串和密钥。
+
+static/ 文件夹包含 CSS、JavaScript 和图像等静态资源。
+
+templates/ 文件夹包含 HTML 模板,其中 base.html 是基础模板。
+
+import/ 文件夹包含处理数据导入的蓝图,包括路由、视图函数和实用函数。
+
+graph/ 文件夹包含处理图形操作的蓝图,包括路由、视图函数和实用函数。
+
+errors/ 文件夹包含错误处理程序。
+
+models/ 文件夹包含与 Neo4j 数据库交互的模型和实用函数。
